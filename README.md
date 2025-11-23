@@ -45,3 +45,12 @@ spring:
     driver-class-name: org.postgresql.Driver
   flyway:
     locations: classpath:db/migrations
+```
+
+3. **Ejecutar la aplicación**:
+
+- Spring Boot iniciará la aplicación y Flyway aplicará automáticamente todas las migraciones en la base de datos.
+
+```bash
+# Con Maven
+mvn spring-boot:run
