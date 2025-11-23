@@ -10,7 +10,7 @@ Este repositorio contiene la prueba técnica que incluye el servicio de carga de
 - `db/migrations/` - Migraciones Flyway para la base de datos.
 - `samples/` - Archivos de ejemplo para validar la carga de pedidos.
 - `postman/` - Colección de Postman para probar el endpoint `POST /pedidos/cargar`.
-- `build.gradle` / `pom.xml` - Configuración de build.
+- `pom.xml` - Configuración de build.
 
 ---
 
