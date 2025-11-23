@@ -17,8 +17,8 @@ Este repositorio contiene la prueba técnica que incluye el servicio de carga de
 ## Requisitos
 
 - Java 17+
-- Maven o Gradle (según configuración del proyecto)
-- PostgreSQL/MySQL (según la configuración de tu aplicación)
+- Maven
+- PostgreSQL
 - Postman (para pruebas)
 
 ---
