@@ -30,3 +30,13 @@ Este repositorio contiene la prueba técnica que incluye el servicio de carga de
 ```bash
 git clone https://github.com/usuario/repositorio-prueba-tecnica.git
 cd repositorio-prueba-tecnica
+```
+
+2. **Crear la base de datos vacía**:
+   Crear una base de datos postgres local y configurar las crendenciales en el archivo application.yml
+
+   datasource:
+    url: jdbc:postgresql://{host}:{port}/{database}
+    username: {username}
+    password: {password}
+
