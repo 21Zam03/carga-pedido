@@ -32,7 +32,7 @@ git clone https://github.com/usuario/repositorio-prueba-tecnica.git
 cd repositorio-prueba-tecnica
 ```
 
-2. **Crear la base de datos vacía**:
+2. **Configuración base de datos**:
 - Asegúrate de tener una base de datos creada y accesible (PostgreSQL o MySQL).  
 - Configura la conexión en `application.yml`
 
