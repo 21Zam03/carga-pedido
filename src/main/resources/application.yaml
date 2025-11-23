@@ -1,3 +1,32 @@
 spring:
   application:
     name: carga-pedido
+  datasource:
+    url: jdbc:postgresql://vps-5351104-x.dattaweb.com:5432/carga_pedido_db
+    username: postgres
+    password: postgres123
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+  security:
+    oauth2:
+      resource-server:
+        jwt:
+          key-value: mi_clave_secreta_super_larga_y_segura_para_jwt_hs512_64_bytes_0123
+
+pedidos:
+  batch:
+    size: 500
+
+#logging:
+  #level:
+    #org.springframework.security: DEBUG
+    #org.springframework.security.oauth2: TRACE
