@@ -186,3 +186,6 @@ La aplicación utiliza una estrategia de **procesamiento batch** para la carga m
 La aplicación cuenta con **pruebas unitarias en la capa de dominio**, logrando una cobertura de **81%**.  
 Estas pruebas validan la lógica de negocio de los pedidos y aseguran que las reglas del dominio se cumplan correctamente antes de persistir los datos.
 
+<img width="1090" height="214" alt="image" src="https://github.com/user-attachments/assets/f7067241-f201-4996-bd63-3c5ee4b2bb83" />
+
+
