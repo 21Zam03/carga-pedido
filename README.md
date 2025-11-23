@@ -83,9 +83,10 @@ Esta aplicación permite cargar pedidos de manera batch y gestionarlos a través
 
 - **Ejemplo de uso con Postman:**
   1. Importar la colección `postman/PruebaTecnica.postman_collection.json`.
-  2. Seleccionar el endpoint `POST /pedidos/cargar`.
-  3. Adjuntar un archivo de ejemplo desde `/samples`.
-  4. Ejecutar la solicitud y revisar el resumen de carga.
+  2. Seleccionar el endpoint `POST /carga-pedido/csv`.
+  3. Agregar el header `Idempotency-Key` con un valor único (por ejemplo, un UUID).
+  4. Adjuntar un archivo CSV desde `/samples`.
+  5. Ejecutar la solicitud y revisar el resumen de la carga.
 
 #### `GET /pedidos` (opcional, si existe)
 
