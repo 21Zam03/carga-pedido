@@ -54,3 +54,45 @@ spring:
 ```bash
 # Con Maven
 mvn spring-boot:run
+```
+
+## Uso de la Aplicación
+
+Esta aplicación permite cargar pedidos de manera batch y gestionarlos a través de la API. A continuación se describen las principales características y endpoints disponibles:
+
+### Características principales
+
+- Carga de pedidos desde archivos CSV.
+- Procesamiento por lotes (batch) para optimizar la inserción de datos.
+- Validación de datos y manejo de errores por lote.
+- Registro de logs de procesamiento.
+- Documentación de la API disponible vía OpenAPI.
+
+### Endpoints disponibles
+
+#### `POST /pedidos/cargar`
+
+- **Descripción:** Permite cargar un archivo de pedidos en la base de datos.  
+- **Entrada:** Archivo CSV con el formato de pedidos esperado.  
+- **Respuesta:** JSON con un resumen del procesamiento, incluyendo:
+  - Número de registros cargados correctamente.
+  - Número de errores y detalles de los registros inválidos.  
+
+- **Ejemplo de uso con Postman:**
+  1. Importar la colección `postman/PruebaTecnica.postman_collection.json`.
+  2. Seleccionar el endpoint `POST /pedidos/cargar`.
+  3. Adjuntar un archivo de ejemplo desde `/samples`.
+  4. Ejecutar la solicitud y revisar el resumen de carga.
+
+#### `GET /pedidos` (opcional, si existe)
+
+- **Descripción:** Listar los pedidos cargados en la base de datos.  
+- **Parámetros:** Puede incluir filtros opcionales como fecha, estado o cliente.  
+- **Respuesta:** JSON con la lista de pedidos existentes.  
+
+---
+
+### Esquema OpenAPI
+
+- El esquema completo de la API está disponible en tiempo de ejecución:
+
