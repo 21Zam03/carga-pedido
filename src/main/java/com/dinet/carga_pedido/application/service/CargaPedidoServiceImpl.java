@@ -63,6 +63,10 @@ public class CargaPedidoServiceImpl implements CargaPedidoService {
 
     @Override
     public ResumenDto cargarPedidosDesdeCsv(MultipartFile multipartFile, String idempotencyKey) throws Exception {
+
+        /**Creamos variables para los contadores, usamos AtomicInteger para asegurar operaciones atomicas en caso de que el
+        procesamiento se ejecute en entornos mutihilos*
+        **/
         AtomicInteger procesados = new AtomicInteger(0);
         AtomicInteger guardados = new AtomicInteger(0);
         AtomicInteger conError = new AtomicInteger(0);
@@ -71,6 +75,7 @@ public class CargaPedidoServiceImpl implements CargaPedidoService {
         List<FilaDetalle> errores = new ArrayList<>();
         List<PedidoModel> batch = new ArrayList<>();
 
+        //Creamos el hash del archivo y lo comparamos con el idempotency en base de datos
         byte[] archivoBytes = multipartFile.getBytes();
         String hashCode = HashUtil.calcularSHA256(archivoBytes);
         idempotencyValidatorService.validar(idempotencyKey, hashCode);
@@ -79,6 +84,7 @@ public class CargaPedidoServiceImpl implements CargaPedidoService {
         Set<String> zonaIds = new HashSet<>();
         Set<String> numeroPedidosCSV = new HashSet<>();
 
+        //Obtenemos todos los ids de clientes, zonas y numero pedido para hacer consultas en lotes a la base de datos y no hacerlo uno por uno.
         fileReader.readStream(multipartFile.getInputStream(), dto -> {
             clienteIds.add(dto.getClienteId());
             zonaIds.add(dto.getZonaEntrega());
@@ -98,7 +104,7 @@ public class CargaPedidoServiceImpl implements CargaPedidoService {
                 try {
 
                     //pedidoValidatorService.validarConDb(pedido);
-
+                    //Validaciones con base de datos
                     if (pedidosExistentes.contains(pedido.getNumeroPedido()) || batch.stream().anyMatch(p -> p.getNumeroPedido().equals(pedido.getNumeroPedido()))) {
                         throw new RuntimeException("DUPLICADO: El numero de pedido "+pedido.getNumeroPedido()+" ya existe");
                     }
@@ -116,9 +122,11 @@ public class CargaPedidoServiceImpl implements CargaPedidoService {
                         throw new RuntimeException("CADENA_FRIO_NO_SOPORTADA: la zona con id "+pedido.getZonaEntrega()+" no tiene soporte de refrigeracion");
                     }
 
+                    //Validaciones puras de negocio - dominio
                     PedidoModel pedidoModel = pedidoMapper.dtoToDomain(pedido);
                     pedidoModel.validarNegocio();
 
+                    //Estrategia batch
                     batch.add(pedidoModel);
                     if (batch.size() >= batchSize) {
                         pedidoRepository.saveAll(batch);
@@ -128,6 +136,7 @@ public class CargaPedidoServiceImpl implements CargaPedidoService {
                     guardados.incrementAndGet();
 
                 } catch (Exception e) {
+                    //Manejamos los errores y detalles
                     conError.incrementAndGet();
                     errores.add(new FilaDetalle(procesados.get(), e.getMessage()));
 
@@ -136,10 +145,12 @@ public class CargaPedidoServiceImpl implements CargaPedidoService {
                 }
             });
 
+            //Aseguramos que se guarda el batch en caso no alcanze el limite configurado en el archivo yml
             if (!batch.isEmpty()) {
                 pedidoRepository.saveAll(batch);
             }
 
+            //Guardamos la carga de idempotencia
             if (guardados.get() > 0) {
                 CargaIdempotenciaModel cargaIdempotenciaModel = new CargaIdempotenciaModel();
                 cargaIdempotenciaModel.setArchivoHash(hashCode);
@@ -147,13 +158,15 @@ public class CargaPedidoServiceImpl implements CargaPedidoService {
                 cargaIdempotenciaModel.setIdempotencyKey(idempotencyKey);
 
                 cargaIdempotenciaRepository.saveCargaIdempotencia(cargaIdempotenciaModel);
+                log.info("Carga idempotencia se guardo exitosamente");
             }
 
-
         } catch (Exception e) {
+            log.error("Error: {}", e.getMessage());
             throw new RuntimeException("Error: " + e.getMessage());
         }
 
+        //Construimos el detalle del resument de la carga
         ResumenDto resumen = new ResumenDto();
         resumen.setTotalProcesados(procesados.get());
         resumen.setTotalGuardados(guardados.get());

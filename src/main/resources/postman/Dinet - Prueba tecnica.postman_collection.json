@@ -1,0 +1,114 @@
+{
+	"info": {
+		"_postman_id": "a9874761-2320-4b1f-a0fe-1d49ef8b6c14",
+		"name": "Dinet - Prueba tecnica",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "46902054",
+		"_collection_link": "https://josezambrano-8390052.postman.co/workspace/Jose-Zambrano's-Workspace~e5482f52-8f96-4f6b-8fc7-64acaf056f9c/collection/46902054-a9874761-2320-4b1f-a0fe-1d49ef8b6c14?action=share&source=collection_link&creator=46902054"
+	},
+	"item": [
+		{
+			"name": "Carga",
+			"item": [
+				{
+					"name": "carga-pedido",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKb3NlIFphbWJyYW5vIiwidXNlcm5hbWUiOiJKb3NlIFphbWJyYW5vIiwiaWF0IjoxNzYzOTE1NjA5LCJleHAiOjE3NjM5MjY0MDl9.d0sznc2O-HUnT7LRgVNNuGlZ_7N09Y0kF9GAdgGAYIc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Idempotency-Key",
+								"value": "qwertyuiop-12345678910",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/home/zam2103/Desktop/Projects/dinet/carga-pedido/src/main/resources/samples/carga-pedido.csv"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/carga-pedido/csv",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"carga-pedido",
+								"csv"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Token",
+			"item": [
+				{
+					"name": "obtener-token",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKb3NlIFphbWJyYW5vIiwidXNlcm5hbWUiOiJKb3NlIFphbWJyYW5vIiwiaWF0IjoxNzYzOTA5MzYwLCJleHAiOjE3NjM5MjAxNjB9.ArGqfNq7WNNsEwu5GDneNty8J_u2yXCyjkvbkyHIwPw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Idempotency-Key",
+								"value": "qwertyuiop-12345678910",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
