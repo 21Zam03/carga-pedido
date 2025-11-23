@@ -122,6 +122,9 @@ Estas URLs permiten:
 - Probar solicitudes directamente desde la interfaz web.  
 - Generar clientes de API si es necesario.
 
+<img width="1915" height="879" alt="image" src="https://github.com/user-attachments/assets/f584487d-ac7b-47ef-975b-99b3adb983c5" />
+
+
 ## Estrategia de Batch
 
 La aplicación utiliza una estrategia de **procesamiento batch** para la carga masiva de pedidos desde archivos CSV, permitiendo manejar grandes volúmenes de datos (más de 100 registros) de manera eficiente y segura. A continuación se describe el flujo implementado:
