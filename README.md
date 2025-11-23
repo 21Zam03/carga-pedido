@@ -33,10 +33,15 @@ cd repositorio-prueba-tecnica
 ```
 
 2. **Crear la base de datos vacía**:
-   Crear una base de datos postgres local y configurar las crendenciales en el archivo application.yml
+- Asegúrate de tener una base de datos creada y accesible (PostgreSQL o MySQL).  
+- Configura la conexión en `application.yml` o `application.properties`:
 
-   datasource:
-    url: jdbc:postgresql://{host}:{port}/{database}
-    username: {username}
-    password: {password}
-
+```yaml
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/pedidos_db
+    username: tu_usuario
+    password: tu_contraseña
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    locations: classpath:db/migrations
