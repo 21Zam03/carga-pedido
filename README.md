@@ -84,7 +84,7 @@ Esta aplicación permite cargar pedidos de manera batch y gestionarlos a través
 
 - **Ejemplo de uso con Postman:**
   1. Ejecutar `POST /token` para obtener un token JWT válido.  
-  2. Importar la colección `postman/PruebaTecnica.postman_collection.json`.  
+  2. Importar la colección `postman/Dinet - Prueba tecnica.postman_collection.json`.  
   3. Seleccionar el endpoint `POST /carga-pedido/csv`.  
   4. Agregar los headers:  
      - `Authorization: Bearer <token>`  
@@ -100,7 +100,7 @@ Esta aplicación permite cargar pedidos de manera batch y gestionarlos a través
 - **Respuesta:** Devuelve un string con el token JWT generado.
 
 - **Ejemplo de uso con Postman:**
-  1. Importar la colección `postman/PruebaTecnica.postman_collection.json`.
+  1. Importar la colección `postman/Dinet - Prueba tecnica.postman_collection.json`.
   2. Seleccionar el endpoint `POST /api/token`.
   3. Ejecutar la solicitud.
   4. Copiar el token devuelto para usarlo en otros endpoints que requieran autenticación.
