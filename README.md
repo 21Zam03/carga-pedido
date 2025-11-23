@@ -74,19 +74,23 @@ Esta aplicación permite cargar pedidos de manera batch y gestionarlos a través
 
 - **Descripción:** Permite cargar un archivo CSV con pedidos en la base de datos de manera batch.  
 - **Headers requeridos:**  
-  - `Idempotency-Key`: Clave única para garantizar idempotencia en la carga.  
+  - `Authorization`: `Bearer <token>` — Token JWT obtenido previamente desde `POST /api/token`.
+  - `Idempotency-Key`: Clave única para garantizar idempotencia en la carga.
 - **Parámetros de formulario (multipart/form-data):**  
-  - `file`: Archivo CSV con los pedidos a cargar.  
+  - `file`: Archivo CSV con los pedidos a cargar.
 - **Respuesta:** JSON con un resumen del procesamiento (`ResumenDto`), que incluye:
   - Número de registros cargados correctamente.
   - Número de errores y detalles de los registros inválidos.
 
 - **Ejemplo de uso con Postman:**
-  1. Importar la colección `postman/PruebaTecnica.postman_collection.json`.
-  2. Seleccionar el endpoint `POST /api/carga-pedido/csv`.
-  3. Agregar el header `Idempotency-Key` con un valor único (por ejemplo, un UUID).
-  4. Adjuntar un archivo CSV desde `/samples`.
-  5. Ejecutar la solicitud y revisar el resumen de la carga.
+  1. Ejecutar `POST /token` para obtener un token JWT válido.  
+  2. Importar la colección `postman/PruebaTecnica.postman_collection.json`.  
+  3. Seleccionar el endpoint `POST /carga-pedido/csv`.  
+  4. Agregar los headers:  
+     - `Authorization: Bearer <token>`  
+     - `Idempotency-Key: <valor-único>`  
+  5. Adjuntar un archivo CSV desde `/samples`.  
+  6. Ejecutar la solicitud y revisar el resumen de la carga.
 
 #### `POST /api/token`
 
@@ -103,7 +107,17 @@ Esta aplicación permite cargar pedidos de manera batch y gestionarlos a través
 
 ---
 
-### Esquema OpenAPI
+## Esquema OpenAPI
 
-- El esquema completo de la API está disponible en tiempo de ejecución:
+El esquema completo de la API está disponible en tiempo de ejecución:
 
+- **JSON OpenAPI:**  
+[http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs)
+
+- **Swagger UI (interfaz web para explorar la API):**  
+[http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+
+Estas URLs permiten:  
+- Visualizar la documentación de todos los endpoints.  
+- Probar solicitudes directamente desde la interfaz web.  
+- Generar clientes de API si es necesario.
