@@ -180,3 +180,9 @@ La aplicación utiliza una estrategia de **procesamiento batch** para la carga m
 - Evita duplicados mediante idempotencia.
 - Permite un control detallado de errores y seguimiento por tipo de fallo.
 - Garantiza integridad y consistencia en la base de datos.
+
+## Pruebas Unitarias
+
+La aplicación cuenta con **pruebas unitarias en la capa de dominio**, logrando una cobertura de **81%**.  
+Estas pruebas validan la lógica de negocio de los pedidos y aseguran que las reglas del dominio se cumplan correctamente antes de persistir los datos.
+
