@@ -121,3 +121,62 @@ Estas URLs permiten:
 - Visualizar la documentación de todos los endpoints.  
 - Probar solicitudes directamente desde la interfaz web.  
 - Generar clientes de API si es necesario.
+
+## Estrategia de Batch
+
+La aplicación utiliza una estrategia de **procesamiento batch** para la carga masiva de pedidos desde archivos CSV, permitiendo manejar grandes volúmenes de datos (más de 100 registros) de manera eficiente y segura. A continuación se describe el flujo implementado:
+
+### Flujo de procesamiento
+
+1. **Validación de idempotencia**
+   - Se calcula un hash SHA-256 del archivo recibido.
+   - Se valida que la clave `Idempotency-Key` junto con el hash del archivo no hayan sido procesados anteriormente, evitando duplicados.
+
+2. **Lectura inicial del archivo**
+   - Se realiza un primer barrido del CSV para extraer:
+     - IDs de clientes
+     - IDs de zonas de entrega
+     - Números de pedido
+   - Esto permite hacer consultas a la base de datos de manera anticipada y reducir accesos repetidos.
+
+3. **Carga de datos de referencia**
+   - Se obtienen de la base de datos todos los pedidos existentes para evitar duplicados.
+   - Se cargan en memoria los clientes y zonas involucradas para validaciones rápidas.
+
+4. **Procesamiento por lotes (batch)**
+   - Cada fila del CSV se valida:
+     - Duplicidad de número de pedido
+     - Existencia del cliente
+     - Existencia y compatibilidad de la zona de entrega
+     - Validaciones de negocio adicionales
+   - Los pedidos válidos se agregan a un batch temporal (`List<PedidoModel>`).
+   - Cuando el batch alcanza un tamaño configurado (`batchSize`), se persisten todos los pedidos de golpe con `saveAll()`.
+   - El batch se limpia y se continúa con el siguiente grupo de pedidos.
+
+5. **Registro de errores**
+   - Los pedidos que no cumplen validaciones se registran en una lista de errores con:
+     - Fila procesada
+     - Mensaje de error
+     - Clasificación del tipo de error
+   - Se mantiene un conteo total de registros procesados, guardados y con errores.
+
+6. **Persistencia final y cierre**
+   - Si quedan registros pendientes en el batch al finalizar la lectura, se guardan en la base de datos.
+   - Se registra la carga en la tabla de idempotencia con el hash del archivo y la clave de idempotencia.
+
+7. **Resumen final**
+   - Se genera un objeto `ResumenDto` que incluye:
+     - Total de registros procesados
+     - Total de registros guardados
+     - Total de registros con error
+     - Detalle de errores por fila
+     - Conteo de errores por tipo
+---
+
+### Beneficios de esta estrategia
+
+- Minimiza el número de accesos a la base de datos.
+- Permite procesar archivos grandes de manera eficiente.
+- Evita duplicados mediante idempotencia.
+- Permite un control detallado de errores y seguimiento por tipo de fallo.
+- Garantiza integridad y consistencia en la base de datos.
