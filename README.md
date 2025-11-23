@@ -83,16 +83,23 @@ Esta aplicación permite cargar pedidos de manera batch y gestionarlos a través
 
 - **Ejemplo de uso con Postman:**
   1. Importar la colección `postman/PruebaTecnica.postman_collection.json`.
-  2. Seleccionar el endpoint `POST /carga-pedido/csv`.
+  2. Seleccionar el endpoint `POST /api/carga-pedido/csv`.
   3. Agregar el header `Idempotency-Key` con un valor único (por ejemplo, un UUID).
   4. Adjuntar un archivo CSV desde `/samples`.
   5. Ejecutar la solicitud y revisar el resumen de la carga.
 
-#### `GET /pedidos` (opcional, si existe)
+#### `POST /api/token`
 
-- **Descripción:** Listar los pedidos cargados en la base de datos.  
-- **Parámetros:** Puede incluir filtros opcionales como fecha, estado o cliente.  
-- **Respuesta:** JSON con la lista de pedidos existentes.  
+- **Descripción:** Genera un token JWT que se puede usar para autenticación o pruebas de la API.  
+- **Headers requeridos:** Ninguno.  
+- **Parámetros de entrada:** Ninguno.  
+- **Respuesta:** Devuelve un string con el token JWT generado.
+
+- **Ejemplo de uso con Postman:**
+  1. Importar la colección `postman/PruebaTecnica.postman_collection.json`.
+  2. Seleccionar el endpoint `POST /api/token`.
+  3. Ejecutar la solicitud.
+  4. Copiar el token devuelto para usarlo en otros endpoints que requieran autenticación.
 
 ---
 
