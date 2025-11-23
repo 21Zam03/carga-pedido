@@ -34,7 +34,7 @@ cd repositorio-prueba-tecnica
 
 2. **Crear la base de datos vacía**:
 - Asegúrate de tener una base de datos creada y accesible (PostgreSQL o MySQL).  
-- Configura la conexión en `application.yml` o `application.properties`:
+- Configura la conexión en `application.yml`
 
 ```yaml
 spring:
