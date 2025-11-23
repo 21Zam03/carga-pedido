@@ -70,13 +70,16 @@ Esta aplicación permite cargar pedidos de manera batch y gestionarlos a través
 
 ### Endpoints disponibles
 
-#### `POST /pedidos/cargar`
+#### `POST /api/carga-pedido/csv`
 
-- **Descripción:** Permite cargar un archivo de pedidos en la base de datos.  
-- **Entrada:** Archivo CSV con el formato de pedidos esperado.  
-- **Respuesta:** JSON con un resumen del procesamiento, incluyendo:
+- **Descripción:** Permite cargar un archivo CSV con pedidos en la base de datos de manera batch.  
+- **Headers requeridos:**  
+  - `Idempotency-Key`: Clave única para garantizar idempotencia en la carga.  
+- **Parámetros de formulario (multipart/form-data):**  
+  - `file`: Archivo CSV con los pedidos a cargar.  
+- **Respuesta:** JSON con un resumen del procesamiento (`ResumenDto`), que incluye:
   - Número de registros cargados correctamente.
-  - Número de errores y detalles de los registros inválidos.  
+  - Número de errores y detalles de los registros inválidos.
 
 - **Ejemplo de uso con Postman:**
   1. Importar la colección `postman/PruebaTecnica.postman_collection.json`.
