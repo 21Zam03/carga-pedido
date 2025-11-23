@@ -32,4 +32,13 @@ public class CargaIdempotenciaEntity {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
+    @PrePersist
+    public void prePersist() {
+        if (this.id == null) {
+            this.id = UUID.randomUUID();
+        }
+        LocalDateTime now = LocalDateTime.now();
+        this.createdAt = now;
+    }
+
 }

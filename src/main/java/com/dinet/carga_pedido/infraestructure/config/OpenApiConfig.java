@@ -20,7 +20,6 @@ public class OpenApiConfig {
         return new OpenAPI()
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
 
-                // Definición del esquema de seguridad
                 .components(new io.swagger.v3.oas.models.Components()
                         .addSecuritySchemes(securitySchemeName,
                                 new SecurityScheme()

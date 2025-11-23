@@ -7,16 +7,18 @@ import com.dinet.carga_pedido.domain.model.ClienteModel;
 import com.dinet.carga_pedido.domain.model.PedidoModel;
 import com.dinet.carga_pedido.domain.model.ZonaModel;
 import com.dinet.carga_pedido.domain.port.out.*;
-import com.dinet.carga_pedido.infraestructure.adapter.out.persistence.entity.ClienteEntity;
 import com.dinet.carga_pedido.infraestructure.adapter.out.persistence.mapper.PedidoMapper;
 import com.dinet.carga_pedido.shared.dto.FilaDetalle;
 import com.dinet.carga_pedido.shared.dto.ResumenDto;
 import com.dinet.carga_pedido.application.port.in.CargaPedidoService;
 import com.dinet.carga_pedido.util.HashUtil;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
@@ -62,6 +64,7 @@ public class CargaPedidoServiceImpl implements CargaPedidoService {
     }
 
     @Override
+    @Transactional
     public ResumenDto cargarPedidosDesdeCsv(MultipartFile multipartFile, String idempotencyKey) throws Exception {
 
         /**Creamos variables para los contadores, usamos AtomicInteger para asegurar operaciones atomicas en caso de que el
@@ -91,7 +94,7 @@ public class CargaPedidoServiceImpl implements CargaPedidoService {
             numeroPedidosCSV.add(dto.getNumeroPedido());
         });
 
-        Set<String> pedidosExistentes = new HashSet<>(pedidoRepository.findAllNumeroPedidos());
+        Set<String> pedidosExistentes = new HashSet<>(pedidoRepository.findAllNumeroPedidos(numeroPedidosCSV));
         Map<String, ClienteModel> clientesMap = clienteRepository.findByIdIn(clienteIds)
                 .stream().collect(Collectors.toMap(ClienteModel::getId, c -> c));
         Map<String, ZonaModel> zonasMap = zonaRepository.findByIdIn(zonaIds)
@@ -108,6 +111,7 @@ public class CargaPedidoServiceImpl implements CargaPedidoService {
                     if (pedidosExistentes.contains(pedido.getNumeroPedido()) || batch.stream().anyMatch(p -> p.getNumeroPedido().equals(pedido.getNumeroPedido()))) {
                         throw new RuntimeException("DUPLICADO: El numero de pedido "+pedido.getNumeroPedido()+" ya existe");
                     }
+
 
                     if (!clientesMap.containsKey(pedido.getClienteId())) {
                         throw new RuntimeException("CLIENTE_NO_ENCONTRADO: el cliente con id "+pedido.getClienteId()+" no existe");
@@ -130,10 +134,9 @@ public class CargaPedidoServiceImpl implements CargaPedidoService {
                     batch.add(pedidoModel);
                     if (batch.size() >= batchSize) {
                         pedidoRepository.saveAll(batch);
+                        guardados.addAndGet(batch.size());
                         batch.clear();
                     }
-
-                    guardados.incrementAndGet();
 
                 } catch (Exception e) {
                     //Manejamos los errores y detalles
@@ -148,6 +151,7 @@ public class CargaPedidoServiceImpl implements CargaPedidoService {
             //Aseguramos que se guarda el batch en caso no alcanze el limite configurado en el archivo yml
             if (!batch.isEmpty()) {
                 pedidoRepository.saveAll(batch);
+                guardados.addAndGet(batch.size());
             }
 
             //Guardamos la carga de idempotencia

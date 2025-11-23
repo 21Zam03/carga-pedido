@@ -24,7 +24,6 @@ import java.util.UUID;
 public class PedidoEntity {
 
     @Id
-    @GeneratedValue(generator = "UUID")
     @Column(updatable = false, nullable = false)
     private UUID id;
 
@@ -54,6 +53,9 @@ public class PedidoEntity {
 
     @PrePersist
     public void prePersist() {
+        if (this.id == null) {
+            this.id = UUID.randomUUID();
+        }
         LocalDateTime now = LocalDateTime.now();
         this.createdAt = now;
         this.updatedAt = now;

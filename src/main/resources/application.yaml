@@ -2,14 +2,22 @@ spring:
   application:
     name: carga-pedido
   datasource:
-    url: jdbc:postgresql://vps-5351104-x.dattaweb.com:5432/carga_pedido_db
-    username: postgres
-    password: postgres123
+    url: jdbc:postgresql://localhost:5432/mydb
+    username: myuser
+    password: mypassword
   jpa:
     hibernate:
       ddl-auto: none
     show-sql: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      jdbc:
+        batch_size: 100
+        batch_versioned_data: true
+      order_inserts: true
+      order_updates: true
+      hibernate:
+        generate_statistics: true
 
   flyway:
     enabled: true
@@ -24,9 +32,4 @@ spring:
 
 pedidos:
   batch:
-    size: 500
-
-#logging:
-  #level:
-    #org.springframework.security: DEBUG
-    #org.springframework.security.oauth2: TRACE
+    size: 100

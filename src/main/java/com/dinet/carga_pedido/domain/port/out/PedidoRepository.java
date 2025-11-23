@@ -10,6 +10,6 @@ public interface PedidoRepository {
     PedidoModel save(PedidoModel pedidoModel);
     boolean existsByNumeroPedido(String numeroPedido);
     void saveAll(List<PedidoModel> batch);
-    Set<String> findAllNumeroPedidos();
+    Set<String> findAllNumeroPedidos(Set<String> numeroPedidos);
 
 }

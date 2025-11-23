@@ -3,6 +3,7 @@ package com.dinet.carga_pedido.infraestructure.adapter.out.persistence.repositor
 import com.dinet.carga_pedido.infraestructure.adapter.out.persistence.entity.PedidoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.Set;
 import java.util.UUID;
@@ -11,7 +12,7 @@ public interface PedidoJpaRepository extends JpaRepository<PedidoEntity, UUID> {
 
     boolean existsByNumeroPedido(String numeroPedido);
 
-    @Query("SELECT p.numeroPedido FROM PedidoEntity p")
-    Set<String> findAllNumeroPedidos();
+    @Query("SELECT p.numeroPedido FROM PedidoEntity p WHERE p.numeroPedido IN :numeroPedidos")
+    Set<String> findNumeroPedidosEncontrados(@Param("numeroPedidos") Set<String> numeroPedidos);
 
 }
